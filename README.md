@@ -1,1 +1,1332 @@
 # Employee-Attendance-Management-System
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ABC EAMS - Attendance Management System</title>
+    <style>
+    
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #F8F9FA;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        
+        .system-header {
+            background-color: #2980B9; 
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .system-header h1 {
+            font-size: 28px;
+            margin: 0;
+        }
+        .system-logo {
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%;
+            background-color: white;
+            padding: 5px;
+            display: block; 
+        }
+        .system-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        
+        #login-screen {
+            display: flex; 
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            width: 100%;
+            height: 100vh;
+            background-color: #F8F9FA;
+            position: relative; 
+        }
+        .login-box {
+            background-color: #FFFFFF;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            text-align: center;
+        }
+        .centered-box {
+            position: absolute; 
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10; 
+        }
+        .icon-placeholder-large {
+            width: 120px; height: 120px; border-radius: 50%; 
+            margin: 0 auto 30px; display: flex;
+            justify-content: center; align-items: center; 
+            overflow: hidden; 
+            background-color: #ECF0F1; 
+        }
+        .icon-placeholder-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        
+        #login-screen input[type="text"], #login-screen input[type="password"], #login-screen select, 
+        .modal input[type="text"], .modal input[type="password"], .modal select {
+            border: 1px solid #CED4DA; border-radius: 6px; padding: 12px;
+            margin-bottom: 20px; width: 100%; box-sizing: border-box;
+            background-color: #F0FFF0; 
+        }
+
+        
+        .password-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .password-container input {
+            padding-right: 35px !important; 
+            margin-bottom: 0 !important;
+        }
+        .toggle-password {
+            position: absolute;
+            top: 50%;
+            right: 12px; 
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #555; 
+            font-size: 14px; 
+            font-weight: bold; 
+        }
+
+        #login-screen button[type="submit"] {
+            width: 100%; font-weight: bold;
+            padding: 12px 15px; margin-top: 10px; color: white; border: none;
+            border-radius: 6px; cursor: pointer;
+        }
+        
+        
+        #main-system {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            display: none;
+        }
+        
+        
+        .sidebar {
+            width: 250px; background-color: #2980B9; color: white;
+            padding: 20px 0; box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        .sidebar h2 {
+            text-align: center; margin-bottom: 30px; font-size: 20px;
+            color: #F8F9FA; border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+        .sidebar-item {
+            padding: 15px 20px; cursor: pointer; transition: background-color 0.3s;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .sidebar-item:hover, .sidebar-item.active { background-color: #C0392B; }
+        
+        
+        .content-area { flex-grow: 1; padding: 30px; overflow-y: auto; }
+        .header-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 10px; border-bottom: 2px solid #E9ECEF;
+        }
+        .header-bar h1 { color: #212529; border-bottom: none; font-size: 28px; margin: 0; }
+        
+        
+        .user-info-container {
+            display: flex; 
+            gap: 10px; 
+            align-items: center;
+            background-color: white; 
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-avatar {
+            width: 30px; 
+            height: 30px;
+            border-radius: 50%;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        #current-user-info {
+            font-weight: 600; 
+            color: #34495E;
+            font-size: 15px;
+        }
+        
+        .welcome-block {
+            background-color: #E6F7FF; 
+            border: 1px solid #91D5FF; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 30px;
+        }
+        .welcome-block h2 {
+            color: #0050B3; 
+            margin-top: 0;
+            font-size: 24px;
+        }
+        .welcome-block p {
+            color: #0050B3; 
+            margin-bottom: 0;
+        }
+
+        
+        .controls {
+            display: flex; gap: 10px; flex-wrap: wrap; background-color: #FFFFFF;
+            padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+        .controls input[type="text"] {
+            flex-grow: 1; padding: 10px; border: 1px solid #CED4DA;
+            border-radius: 6px; min-width: 200px;
+        }
+        .controls button {
+            padding: 10px 18px; border-radius: 6px; font-weight: bold;
+            color: white; border: none; cursor: pointer;
+        }
+        #add-employee-btn { background-color: #28A745; }
+        #manual-record-btn { background-color: #007BFF; } 
+        #self-time-in-btn { background-color: #28A745 !important; }
+        #self-time-out-btn { background-color: #DC3545 !important; }
+        
+        
+        .employee-list {
+            width: 100%; border-collapse: collapse; border-radius: 8px;
+            overflow: hidden; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background-color: white;
+        }
+        .employee-list th, .employee-list td {
+            padding: 12px; text-align: left; border-bottom: 1px solid #E9ECEF;
+        }
+        .employee-list th {
+            background-color: #2980B9; color: white; font-weight: 600;
+        }
+        .employee-list tr:nth-child(even) { background-color: #F8F9FA; }
+        #department-summary-section {
+            background-color: #FFFFFF; padding: 20px; border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        
+        .modal {
+            display: none; position: fixed; z-index: 1000; left: 0; top: 0;
+            width: 100%; height: 100%; overflow: auto;
+            background-color: rgba(0,0,0,0.6); padding-top: 60px;
+        }
+        .modal-content {
+            background-color: #fefefe; margin: 5% auto; padding: 30px;
+            border: 1px solid #888; width: 80%; max-width: 500px; border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; }
+        .close:hover, .close:focus { color: black; text-decoration: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <div class="system-header" style="height: 60px;">
+        <div class="system-header">
+            <h1>Attendance Management System</h1>
+            <div class="system-logo">
+                <img src="https://scontent.fmnl40-1.fna.fbcdn.net/v/t1.15752-9/578618121_1410155670642671_7667534407674023025_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHHy-dRel6sRb1vrRrZJsBxqh6xb1uzElyqHrFvW7MSXMYc9-a_DCfWvxMuG0436pyFTiUlPlpEubPlVTXtpBoZ&_nc_ohc=405U-gxkrBMQ7kNvwFyoJQk&_nc_oc=Adn2QQLVBvZH3uB1p9vdGyEUSoxZuEoch3lK98oobxa79ICuX0Gup9oTq9hDTADUQ4s&_nc_zt=23&_nc_ht=scontent.fmnl40-1.fna&oh=03_Q7cD3wGzm8o3n5GmnsH6uxANG77GZa8Z0dFmDkC7Q3LkYZYb8g&oe=693D4558" alt="ABC Logo">
+            </div>
+        </div>
+    </div>
+    
+    <div class="login-box centered-box" id="role-selection" style="display: none;">
+        <div class="icon-placeholder-large">
+             <img src="https://scontent.fmnl40-1.fna.fbcdn.net/v/t1.15752-9/578618121_1410155670642671_7667534407674023025_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHHy-dRel6sRb1vrRrZJsBxqh6xb1uzElyqHrFvW7MSXMYc9-a_DCfWvxMuG0436pyFTiUlPlpEubPlVTXtpBoZ&_nc_ohc=405U-gxkrBMQ7kNvwFyoJQk&_nc_oc=Adn2QQLVBvZH3uB1p9vdGyEUSoxZuEoch3lK98oobxa79ICuX0Gup9oTq9hDTADUQ4s&_nc_zt=23&_nc_ht=scontent.fmnl40-1.fna&oh=03_Q7cD3wGzm8o3n5GmnsH6uxANG77GZa8Z0dFmDkC7Q3LkYZYb8g&oe=693D4558" alt="System Icon">
+        </div>
+        <h2 style="color: #2980B9;">Select Your Role to Login</h2>
+        <button id="show-admin-login-btn" onclick="showRoleLogin('admin')" style="background-color: #C0392B; margin-bottom: 15px; width: 100%; padding: 12px; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">🔐 Admin / HR Login</button>
+        <button id="show-employee-login-btn" onclick="showRoleLogin('employee')" style="background-color: #27AE60; width: 100%; padding: 12px; border: none; color: white; border-radius: 6px; cursor: pointer; font-weight: bold;">👤 Employee Login</button>
+        <p style="font-size: small; color: #777; margin-top: 20px;">Default Accounts:<br>Admin: ABC001/admin | Employee: EMP001/juan</p>
+    </div>
+
+    <div class="login-box centered-box" id="admin-login-box" style="display: none;"> 
+        <div class="icon-placeholder-large" style="margin-bottom: 20px;">
+             <img src="https://scontent.fmnl40-1.fna.fbcdn.net/v/t1.15752-9/578618121_1410155670642671_7667534407674023025_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHHy-dRel6sRb1vrRrZJsBxqh6xb1uzElyqHrFvW7MSXMYc9-a_DCfWvxMuG0436pyFTiUlPlpEubPlVTXtpBoZ&_nc_ohc=405U-gxkrBMQ7kNvwFyoJQk&_nc_oc=Adn2QQLVBvZH3uB1p9vdGyEUSoxZuEoch3lK98oobxa79ICuX0Gup9oTq9hDTADUQ4s&_nc_zt=23&_nc_ht=scontent.fmnl40-1.fna&oh=03_Q7cD3wGzm8o3n5GmnsH6uxANG77GZa8Z0dFmDkC7Q3LkYZYb8g&oe=693D4558" alt="System Icon">
+        </div>
+        <h2 style="color: #C0392B; margin-bottom: 30px;">Admin/HR Access</h2>
+        <form id="admin-login-form" data-role="Admin,HR">
+            <input type="text" id="admin-login-id" placeholder="Admin/HR ID" required>
+            
+            <div class="password-container">
+                <input type="password" id="admin-login-password" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('admin-login-password')">SHOW</span>
+            </div>
+
+            <button type="submit" style="background-color: #C0392B !important;">LOG IN</button>
+        </form>
+        <p style="margin-top: 20px;"><a href="#" onclick="showRoleLogin('selector'); return false;" style="color: #2980B9; text-decoration: none; font-size: 14px;">← Back to Role Select</a></p>
+    </div>
+
+    <div class="login-box centered-box" id="employee-login-box" style="display: none;">
+        <div class="icon-placeholder-large" style="margin-bottom: 20px;">
+             <img src="https://scontent.fmnl40-1.fna.fbcdn.net/v/t1.15752-9/578618121_1410155670642671_7667534407674023025_n.jpg?_nc_cat=101&ccb=1-7&_nc_sid=9f807c&_nc_eui2=AeHHy-dRel6sRb1vrRrZJsBxqh6xb1uzElyqHrFvW7MSXMYc9-a_DCfWvxMuG0436pyFTiUlPlpEubPlVTXtpBoZ&_nc_ohc=405U-gxkrBMQ7kNvwFyoJQk&_nc_oc=Adn2QQLVBvZH3uB1p9vdGyEUSoxZuEoch3lK98oobxa79ICuX0Gup9oTq9hDTADUQ4s&_nc_zt=23&_nc_ht=scontent.fmnl40-1.fna&oh=03_Q7cD3wGzm8o3n5GmnsH6uxANG77GZa8Z0dFmDkC7Q3LkYZYb8g&oe=693D4558" alt="System Icon">
+        </div>
+        <h2 style="color: #27AE60; margin-bottom: 30px;">Employee Login</h2>
+        <form id="employee-login-form" data-role="Employee">
+            <input type="text" id="employee-login-id" placeholder="Employee ID" required>
+            
+            <div class="password-container">
+                <input type="password" id="employee-login-password" placeholder="Password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility('employee-login-password')">SHOW</span>
+            </div>
+
+            <button type="submit" style="background-color: #27AE60 !important;">LOG IN</button>
+        </form>
+        <p style="margin-top: 20px;">
+            <a href="#" onclick="showRoleLogin('selector'); return false;" style="color: #2980B9; text-decoration: none; font-size: 14px;">← Back to Role Select</a>
+            <br>
+            <a href="#" onclick="openModal('self-register-modal'); return false;" style="color: #27AE60; text-decoration: underline; font-size: 14px; font-weight: bold; margin-top: 10px; display: block;">New User? Create Account</a>
+        </p>
+    </div>
+</div>
+
+<div id="main-system">
+    
+    <div class="sidebar">
+        <h2>ABC EAMS</h2>
+        <div class="sidebar-item" id="sidebar-dashboard" onclick="showModule('dashboard')">
+            <span role="img" aria-label="Dashboard">📊</span> <span>Dashboard</span>
+        </div>
+        <div class="sidebar-item" id="sidebar-employees" onclick="showModule('employees')">
+            <span role="img" aria-label="Employees">👥</span> <span>Employees</span>
+        </div>
+        <div class="sidebar-item active" onclick="showModule('attendance')">
+            <span role="img" aria-label="Attendance">⏱️</span> <span>Attendance</span>
+        </div>
+        <div class="sidebar-item" onclick="logout()">
+            <span role="img" aria-label="Logout">🚪</span> <span>Logout</span>
+        </div>
+    </div>
+
+    <div class="content-area">
+        <div class="header-bar">
+            <h1 id="module-title">Attendance Management</h1>
+            <div id="user-info-role" class="user-info-container">
+                <span id="current-user-info"></span>
+                <div id="user-avatar-icon" class="user-avatar">
+                    </div>
+            </div>
+        </div>
+
+        <div id="dashboard-module" class="module-content" style="display: none;">
+            
+            <div class="welcome-block">
+                <h2 style="color: #0050B3; margin-top: 0;">Welcome back, <span id="welcome-name"></span>!</h2>
+                <p style="color: #0050B3; margin-bottom: 0;">You are logged in as <span id="welcome-role"></span>. Here is the summary for today.</p>
+            </div>
+            
+            <div id="department-summary-section">
+                <h2>Department Head Count & Daily Presence</h2>
+                <table id="department-summary-table" class="employee-list" style="width: 100%;">
+                    <thead>
+                        </thead>
+                    <tbody id="department-summary-body"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="employees-module" class="module-content" style="display: none;">
+            <div class="controls">
+                <input type="text" id="search-input" placeholder="Search by Name, ID, or Dept..." onkeyup="filterEmployees()">
+                <button id="add-employee-btn" onclick="openModal('add-employee-modal')">➕ Add Employee</button>
+            </div>
+            
+            <table class="employee-list">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Role</th> 
+                        <th>Current Status</th> 
+                        <th>Latest Time In</th>
+                        <th class="admin-only-header">Actions</th> 
+                    </tr>
+                </thead>
+                <tbody id="employee-table-body"></tbody>
+            </table>
+        </div>
+
+        <div id="attendance-module" class="module-content">
+            
+            <div class="controls">
+                <button id="self-time-in-btn" onclick="recordSelfAttendance('time-in')">✅ TIME IN</button>
+                <button id="self-time-out-btn" onclick="recordSelfAttendance('time-out')">❌ TIME OUT</button>
+                <button id="manual-record-btn" onclick="openModal('attendance-modal')">⏱️ Manual ID Record</button>
+            </div>
+
+            <h2 style="margin-top: 30px; color: #212529;">Attendance Records</h2>
+            
+            <div id="historical-log-view" style="display: none;">
+                <label for="history-filter-id" style="font-weight: bold; margin-bottom: 10px;">Filter by Employee ID:</label>
+                <input type="text" id="history-filter-id" onkeyup="renderHistoricalAttendanceLog()" placeholder="Enter Employee ID to view history" style="padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 250px; margin-bottom: 15px;">
+                
+                <table class="employee-list" style="max-height: 400px; overflow-y: auto;">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Employee ID</th>
+                            <th>Name</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historical-attendance-body"></tbody>
+                </table>
+            </div>
+            
+            <div id="personal-history-view" style="display: none;">
+                <h3 style="color: #2980B9;">My Attendance History</h3>
+                 <table class="employee-list">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personal-history-body"></tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="add-employee-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('add-employee-modal')">&times;</span>
+        <h2>Add New Employee</h2>
+        <form id="add-employee-form">
+            <label for="new-id">Employee ID:</label>
+            <input type="text" id="new-id" required>
+            <label for="new-name">Name:</label>
+            <input type="text" id="new-name" required>
+            <label for="new-password">Password:</label> 
+            <div class="password-container">
+                <input type="password" id="new-password" required style="padding-right: 12px !important; margin-bottom: 0;"> 
+            </div>
+            <label for="new-department">Department:</label>
+            <select id="new-department" required>
+                <option value="">-- Select Department --</option>
+                <option value="Admin">Admin</option>
+                <option value="Operations">Operations</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+            <label for="new-role">Role:</label> 
+            <select id="new-role" required>
+                <option value="Employee">Employee</option>
+                <option value="HR">HR</option> 
+                <option value="Admin">Admin</option>
+            </select>
+            <button type="submit" style="background-color:#C0392B; color:white;">Save Employee</button>
+        </form>
+    </div>
+</div>
+
+<div id="edit-employee-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('edit-employee-modal')">&times;</span>
+        <h2>Edit Employee Information</h2>
+        <form id="edit-employee-form">
+            <input type="hidden" id="edit-original-id">
+            <label for="edit-id">Employee ID:</label>
+            <input type="text" id="edit-id" required>
+            <label for="edit-name">Name:</label>
+            <input type="text" id="edit-name" required>
+            <label for="edit-password">Password:</label> 
+            <input type="password" id="edit-password"> 
+            <small>(Leave blank to keep current password)</small>
+            <label for="edit-department">Department:</label>
+            <select id="edit-department" required>
+                <option value="Admin">Admin</option>
+                <option value="Operations">Operations</option>
+                <option value="HR">HR</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+            <label for="edit-role">Role:</label> 
+            <select id="edit-role" required>
+                <option value="Employee">Employee</option>
+                <option value="HR">HR</option> 
+                <option value="Admin">Admin</option>
+            </select>
+            <button type="submit" style="background-color:#2980B9; color:white;">Update Employee</button>
+        </form>
+    </div>
+</div>
+
+<div id="attendance-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('attendance-modal')">&times;</span>
+        <h2>Record Time-In / Time-Out (Manual)</h2>
+        <form id="attendance-form">
+            <label for="attend-id">Employee ID:</label>
+            <input type="text" id="attend-id" placeholder="Enter Employee ID" required>
+            <label for="attend-type">Action:</label>
+            <select id="attend-type" required>
+                <option value="time-in">Time In</option>
+                <option value="time-out">Time Out</option>
+            </select>
+            <button type="submit" style="background-color: #007BFF; color:white;">Record Now</button>
+        </form>
+    </div>
+</div>
+
+<div id="self-register-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal('self-register-modal')">&times;</span>
+        <h2>Employee Self-Registration</h2>
+        <form id="self-register-form">
+            <label for="reg-id">Employee ID (e.g., EMP004):</label>
+            <input type="text" id="reg-id" required>
+            <label for="reg-name">Full Name:</label>
+            <input type="text" id="reg-name" required>
+            <label for="reg-password">Password:</label> 
+            <div class="password-container">
+                <input type="password" id="reg-password" required style="padding-right: 12px !important; margin-bottom: 0;"> 
+                <span class="toggle-password" onclick="togglePasswordVisibility('reg-password')">SHOW</span>
+            </div>
+            <label for="reg-department">Department:</label>
+            <select id="reg-department" required>
+                <option value="">-- Select Department --</option>
+                <option value="Operations">Operations</option>
+                <option value="Finance">Finance</option>
+                <option value="Sales">Sales</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Others">Others</option>
+            </select>
+            <button type="submit" style="background-color:#27AE60; color:white;">Register Account</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    const STORAGE_KEY = 'abc_employee_data';
+    let employees = [];
+    let loggedInUser = null; 
+
+    function getEmployees() {
+        const data = localStorage.getItem(STORAGE_KEY);
+        let empData = data ? JSON.parse(data) : [];
+
+        
+        if (empData.length === 0 || !empData.some(emp => emp.id === 'ABC001')) {
+            console.warn("No data found or data structure is old. Initializing with new structure and default accounts.");
+            empData = [
+                { id: 'ABC001', name: 'System Admin', department: 'Admin', role: 'Admin', password: 'admin', attendanceLogs: [] },
+                { id: 'HR001', name: 'HR Staff', department: 'HR', role: 'HR', password: 'hr', attendanceLogs: [] },
+                { id: 'EMP001', name: 'Juan Dela Cruz', department: 'Operations', role: 'Employee', password: 'juan', attendanceLogs: [] },
+                
+                { id: 'EMP002', name: 'Maria Santos', department: 'Sales', role: 'Employee', password: 'maria', attendanceLogs: [] },
+                { id: 'EMP003', name: 'Jose Reyes', department: 'Marketing', role: 'Employee', password: 'jose', attendanceLogs: [] }
+            ];
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(empData));
+        }
+        return empData;
+    }
+
+    function saveEmployees() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(employees));
+    }
+    
+    function togglePasswordVisibility(passwordFieldId) {
+        const passwordField = document.getElementById(passwordFieldId);
+        
+        const toggleIcon = passwordField.closest('.password-container').querySelector('.toggle-password'); 
+
+        if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            toggleIcon.textContent = 'HIDE'; 
+        } else {
+            passwordField.type = 'password';
+            toggleIcon.textContent = 'SHOW'; 
+        }
+    }
+
+    function setupUserInfo() {
+        if (!loggedInUser) return;
+
+        const userInfoSpan = document.getElementById('current-user-info');
+        const avatar = document.getElementById('user-avatar-icon');
+        
+        
+        const welcomeName = document.getElementById('welcome-name');
+        const welcomeRole = document.getElementById('welcome-role');
+        if (welcomeName && welcomeRole) {
+            welcomeName.textContent = loggedInUser.name;
+            welcomeRole.textContent = loggedInUser.role;
+        }
+
+        
+        userInfoSpan.textContent = `${loggedInUser.name} (${loggedInUser.role})`;
+        
+        
+        avatar.textContent = loggedInUser.name.charAt(0).toUpperCase(); 
+        
+       
+        if (loggedInUser.role === 'Admin') avatar.style.backgroundColor = '#C0392B'; 
+        else if (loggedInUser.role === 'HR') avatar.style.backgroundColor = '#2980B9'; 
+        else avatar.style.backgroundColor = '#27AE60'; 
+    }
+    
+    
+    function showLoginScreen() {
+        document.getElementById('main-system').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+    }
+
+    function logout() {
+        loggedInUser = null;
+        showLoginScreen(); 
+        document.getElementById('admin-login-id').value = '';
+        document.getElementById('admin-login-password').value = '';
+        document.getElementById('employee-login-id').value = '';
+        document.getElementById('employee-login-password').value = '';
+        showRoleLogin('selector'); // Ibalik sa role selection
+        alert('You have been logged out.');
+    }
+    
+   
+    function showRoleLogin(role) {
+        // Tago lahat
+        document.getElementById('role-selection').style.display = 'none';
+        document.getElementById('admin-login-box').style.display = 'none';
+        document.getElementById('employee-login-box').style.display = 'none';
+
+       
+        if (role === 'admin') {
+            document.getElementById('admin-login-box').style.display = 'block';
+        } else if (role === 'employee') {
+            document.getElementById('employee-login-box').style.display = 'block'; 
+        } else { 
+            document.getElementById('role-selection').style.display = 'block';
+        }
+    }
+
+    
+    function showModule(moduleName) {
+        document.querySelectorAll('.module-content').forEach(el => el.style.display = 'none');
+        document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+
+        const moduleElement = document.getElementById(moduleName + '-module');
+        const sidebarElement = document.querySelector(`.sidebar-item[onclick*="${moduleName}"]`);
+        
+        if (moduleElement) {
+            moduleElement.style.display = 'block';
+            document.getElementById('module-title').textContent = moduleName.charAt(0).toUpperCase() + moduleName.slice(1) + (moduleName === 'dashboard' ? ' Overview' : ' Management');
+        }
+        if (sidebarElement) {
+             sidebarElement.classList.add('active');
+        }
+        
+        setupUserInfo();
+        
+        if (moduleName === 'employees') {
+            renderEmployeeTable();
+            document.getElementById('search-input').value = ''; 
+        } else if (moduleName === 'dashboard') {
+            renderDepartmentSummary();
+        } else if (moduleName === 'attendance') {
+            setupAttendanceView(loggedInUser.role);
+        }
+    }
+
+    function setupAttendanceView(role) {
+        const isHRorAdmin = role === 'Admin' || role === 'HR';
+        
+        
+        const timeInBtn = document.getElementById('self-time-in-btn');
+        const timeOutBtn = document.getElementById('self-time-out-btn');
+        const manualBtn = document.getElementById('manual-record-btn');
+        
+        if (timeInBtn) timeInBtn.style.display = role === 'Employee' ? 'block' : 'none';
+        if (timeOutBtn) timeOutBtn.style.display = role === 'Employee' ? 'block' : 'none';
+        if (manualBtn) manualBtn.style.display = isHRorAdmin ? 'block' : 'none';
+
+        
+        document.getElementById('historical-log-view').style.display = isHRorAdmin ? 'block' : 'none';
+        document.getElementById('personal-history-view').style.display = role === 'Employee' ? 'block' : 'none';
+
+        if (isHRorAdmin) {
+            document.getElementById('history-filter-id').value = ''; 
+            renderHistoricalAttendanceLog(); 
+        } else if (role === 'Employee') {
+            renderPersonalHistory();
+        }
+    }
+
+    function renderHistoricalAttendanceLog() {
+        const logBody = document.getElementById('historical-attendance-body');
+        logBody.innerHTML = '';
+        const filterId = document.getElementById('history-filter-id').value.trim().toLowerCase();
+
+        let allLogs = [];
+        employees.forEach(employee => {
+            const empName = employee.name;
+            employee.attendanceLogs.forEach(log => {
+                allLogs.push({ ...log, id: employee.id, name: empName });
+            });
+        });
+
+        const filteredLogs = allLogs.filter(log => 
+            !filterId || log.id.toLowerCase().includes(filterId)
+        );
+
+        filteredLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        filteredLogs.forEach(log => {
+            const row = logBody.insertRow();
+            row.insertCell().textContent = log.date;
+            row.insertCell().textContent = log.id;
+            row.insertCell().textContent = log.name;
+            row.insertCell().textContent = log.timeIn || 'N/A';
+            row.insertCell().textContent = log.timeOut || 'N/A';
+            
+            const status = log.timeIn && !log.timeOut ? 'Present' : (log.timeOut ? 'Complete' : 'N/A');
+            const statusCell = row.insertCell();
+            statusCell.textContent = status;
+            statusCell.style.fontWeight = 'bold';
+            statusCell.style.color = status === 'Present' ? '#28A745' : (status === 'Complete' ? '#007BFF' : '#DC3545');
+        });
+    }
+
+    function renderPersonalHistory() {
+        const historyBody = document.getElementById('personal-history-body');
+        historyBody.innerHTML = '';
+
+        if (!loggedInUser) return;
+        const employee = employees.find(emp => emp.id === loggedInUser.id);
+        if (!employee) return;
+        
+        const sortedLogs = employee.attendanceLogs.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        sortedLogs.forEach(log => {
+            const row = historyBody.insertRow();
+            row.insertCell().textContent = log.date;
+            row.insertCell().textContent = log.timeIn || 'N/A';
+            row.insertCell().textContent = log.timeOut || 'N/A';
+            
+            const status = log.timeIn && !log.timeOut ? 'Present' : (log.timeOut ? 'Complete' : 'N/A');
+            const statusCell = row.insertCell();
+            statusCell.textContent = status;
+            statusCell.style.fontWeight = 'bold';
+            statusCell.style.color = status === 'Present' ? '#28A745' : (status === 'Complete' ? '#007BFF' : '#DC3545');
+        });
+    }
+
+    function getLastAttendanceStatus(employee) {
+        if (!employee.attendanceLogs || employee.attendanceLogs.length === 0) {
+            return { status: 'N/A', time: 'N/A', latestIn: 'N/A' };
+        }
+        
+        const now = new Date();
+        
+        const todayDate = now.toLocaleDateString();
+        const todayLog = employee.attendanceLogs.find(log => log.date === todayDate);
+
+        if (todayLog) {
+            if (todayLog.timeIn && !todayLog.timeOut) {
+                return { status: 'PRESENT', time: todayLog.timeIn, latestIn: `${todayDate} ${todayLog.timeIn}` };
+            } else if (todayLog.timeIn && todayLog.timeOut) {
+                return { status: 'COMPLETE', time: todayLog.timeOut, latestIn: `${todayDate} ${todayLog.timeIn}` };
+            }
+        }
+        
+        const allIns = employee.attendanceLogs.filter(log => log.timeIn).map(log => ({ 
+            timestamp: new Date(`${log.date} ${log.timeIn}`), 
+            timeIn: log.timeIn,
+            date: log.date
+        }));
+        allIns.sort((a, b) => b.timestamp - a.timestamp);
+        const latestInTime = allIns.length > 0 ? `${allIns[0].date} ${allIns[0].timeIn}` : 'N/A';
+
+        
+        return { status: 'ABSENT', time: 'N/A', latestIn: latestInTime };
+    }
+
+    
+    function renderEmployeeTable() {
+        const tableBody = document.getElementById('employee-table-body');
+        tableBody.innerHTML = ''; 
+        const isAdmin = loggedInUser && loggedInUser.role === 'Admin';
+        const isHRorAdmin = loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR');
+
+        employees.forEach(employee => {
+            const statusData = getLastAttendanceStatus(employee);
+            const row = tableBody.insertRow();
+            
+            row.insertCell().textContent = employee.id;
+            row.insertCell().textContent = employee.name;
+            row.insertCell().textContent = employee.department;
+            row.insertCell().textContent = employee.role; 
+            
+            const statusCell = row.insertCell();
+            statusCell.textContent = statusData.status;
+            statusCell.style.fontWeight = 'bold';
+            statusCell.style.color = statusData.status === 'PRESENT' ? '#28A745' : (statusData.status === 'ABSENT' ? '#DC3545' : '#007BFF');
+
+            row.insertCell().textContent = statusData.latestIn;
+            
+            const actionCell = row.insertCell();
+            actionCell.className = 'admin-only-cell'; 
+
+            if (isAdmin) {
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.className = 'action-btn edit-btn';
+                editBtn.onclick = () => openEditModal(employee.id);
+                actionCell.appendChild(editBtn);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.className = 'action-btn delete-btn';
+                deleteBtn.onclick = () => deleteEmployee(employee.id, employee.name);
+                actionCell.appendChild(deleteBtn);
+            } else if (isHRorAdmin) { 
+                 actionCell.textContent = 'View Only';
+            }
+        });
+        
+        checkAccessControl(loggedInUser ? loggedInUser.role : '');
+    }
+
+    
+    function recordAttendance(attendId, attendType, isManual = false) {
+        const employeeIndex = employees.findIndex(emp => emp.id === attendId);
+        
+        if (employeeIndex === -1) { alert('ERROR: Employee ID not found!'); return; }
+        
+        const employee = employees[employeeIndex];
+        const now = new Date();
+        const dateString = now.toLocaleDateString();
+        const timeString = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+
+        let todayLog = employee.attendanceLogs.find(log => log.date === dateString);
+
+        if (attendType === 'time-in') {
+            if (todayLog && todayLog.timeIn) {
+                alert(`WARNING: ${employee.name} already Timed In today at ${todayLog.timeIn}!`);
+                return;
+            }
+            if (!todayLog) {
+                todayLog = { date: dateString, timeIn: timeString, timeOut: null };
+                employee.attendanceLogs.push(todayLog);
+            } else {
+                 todayLog.timeIn = timeString; 
+            }
+            alert(`SUCCESS: Time-In Recorded for ${employee.name} at ${timeString}`);
+        } else if (attendType === 'time-out') {
+            if (!todayLog || !todayLog.timeIn) {
+                alert(`ERROR: Cannot Time-Out. ${employee.name} has not Timed In today.`);
+                return;
+            }
+            if (todayLog.timeOut) {
+                alert(`WARNING: ${employee.name} already Timed Out today at ${todayLog.timeOut}!`);
+                return;
+            }
+            
+            todayLog.timeOut = timeString;
+            alert(`SUCCESS: Time-Out Recorded for ${employee.name} at ${timeString}`);
+        }
+
+        saveEmployees();
+        
+        if (isManual || (loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR'))) {
+            renderHistoricalAttendanceLog();
+            renderEmployeeTable();
+        } else if (loggedInUser && loggedInUser.role === 'Employee') {
+            renderPersonalHistory();
+        }
+        
+        if (loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR')) {
+            renderDepartmentSummary();
+        }
+    }
+
+    
+    function recordSelfAttendance(attendType) {
+        if (!loggedInUser) { alert('ERROR: Please log in first.'); return; }
+        recordAttendance(loggedInUser.id, attendType, false);
+    }
+
+    
+    document.getElementById('attendance-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const attendId = document.getElementById('attend-id').value.trim();
+        const attendType = document.getElementById('attend-type').value; 
+        
+        recordAttendance(attendId, attendType, true);
+        this.reset();
+        closeModal('attendance-modal');
+    });
+
+    
+    function handleLogin(event, isEmployeeForm) {
+        event.preventDefault();
+
+        const form = isEmployeeForm ? document.getElementById('employee-login-form') : document.getElementById('admin-login-form');
+        
+        
+        const idInput = isEmployeeForm ? document.getElementById('employee-login-id') : document.getElementById('admin-login-id');
+        const passwordInput = isEmployeeForm ? document.getElementById('employee-login-password') : document.getElementById('admin-login-password');
+        
+        const id = idInput.value.trim();
+        const password = passwordInput.value;
+        const allowedRoles = form.getAttribute('data-role').split(',');
+
+        const user = employees.find(emp => emp.id === id);
+
+        if (!user || user.password !== password) {
+            alert('Login Failed: Invalid ID or Password.');
+            passwordInput.value = '';
+            return;
+        }
+        
+        
+        if (!allowedRoles.includes(user.role)) {
+            alert(`Access Denied: Your role (${user.role}) is not allowed through this portal.`);
+            passwordInput.value = '';
+            return;
+        }
+
+        loggedInUser = user;
+        alert(`Welcome, ${user.name}! Role: ${user.role}`);
+        
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('main-system').style.display = 'flex';
+
+        setupUserInfo();
+        checkAccessControl(user.role); 
+        
+        
+        if (user.role === 'Employee') {
+            
+            showModule('attendance');
+        } else {
+            
+            showModule('dashboard'); 
+        }
+
+        passwordInput.value = '';
+    }
+
+    
+    document.getElementById('admin-login-form').addEventListener('submit', (e) => handleLogin(e, false));
+    document.getElementById('employee-login-form').addEventListener('submit', (e) => handleLogin(e, true));
+    
+    
+    function checkAccessControl(role) {
+        const isEmployee = role === 'Employee';
+        const isHRorAdmin = role === 'Admin' || role === 'HR';
+        const isFullAdmin = role === 'Admin';
+        
+        
+        const dashboardSidebar = document.getElementById('sidebar-dashboard');
+        const employeesSidebar = document.getElementById('sidebar-employees');
+        const addBtn = document.getElementById('add-employee-btn');
+        
+        
+        if (dashboardSidebar) dashboardSidebar.style.display = isHRorAdmin ? 'flex' : 'none';
+        
+        
+        if (employeesSidebar) employeesSidebar.style.display = isHRorAdmin ? 'flex' : 'none';
+        
+        
+        if (addBtn) addBtn.style.display = isFullAdmin ? 'block' : 'none';
+        
+        
+        const adminElements = document.querySelectorAll('.admin-only-header, .admin-only-cell');
+        
+        const adminHeader = document.querySelector('.admin-only-header');
+        if(adminHeader) {
+            adminHeader.textContent = isHRorAdmin ? (isFullAdmin ? 'Actions' : 'Details') : '';
+        }
+
+        adminElements.forEach(el => el.style.display = isHRorAdmin ? 'table-cell' : 'none');
+        
+        
+    }
+
+    
+    function renderDepartmentSummary() {
+        const summaryBody = document.getElementById('department-summary-body');
+        summaryBody.innerHTML = ''; 
+
+        
+        const departmentCounts = employees.reduce((acc, employee) => {
+            const dept = employee.department;
+            
+            if (dept !== 'Admin' && dept !== 'HR') {
+                 acc[dept] = (acc[dept] || 0) + 1;
+            }
+            return acc;
+        }, {}); 
+        
+        
+        departmentCounts['Admin'] = employees.filter(emp => emp.department === 'Admin').length;
+        departmentCounts['HR'] = employees.filter(emp => emp.department === 'HR').length;
+        
+        
+        let presentCount = 0;
+        let completeCount = 0;
+        let totalAbsentCount = 0;
+        
+        const presentCountsPerDept = {};
+        const absentCountsPerDept = {};
+
+        const now = new Date();
+        const todayDate = now.toLocaleDateString();
+
+        employees.forEach(employee => {
+            const dept = employee.department;
+            const todayLog = employee.attendanceLogs.find(log => log.date === todayDate);
+            
+            
+            let isPresent = false;
+            let isComplete = false;
+
+            if (todayLog) {
+                if (todayLog.timeIn && !todayLog.timeOut) {
+                    isPresent = true;
+                } else if (todayLog.timeIn && todayLog.timeOut) {
+                    isComplete = true;
+                }
+            }
+            
+            
+            if (isPresent) {
+                presentCount++;
+                presentCountsPerDept[dept] = (presentCountsPerDept[dept] || 0) + 1;
+            } else if (isComplete) {
+                completeCount++;
+                
+            }
+            
+            
+            if (!isPresent && !isComplete) {
+                totalAbsentCount++;
+                absentCountsPerDept[dept] = (absentCountsPerDept[dept] || 0) + 1;
+            }
+        });
+
+
+        const summaryTable = document.getElementById('department-summary-table');
+        if (summaryTable.tHead) summaryTable.tHead.innerHTML = '';
+        if (!summaryTable.tHead) summaryTable.createTHead(); 
+        
+        const headerRow = summaryTable.tHead.insertRow();
+        headerRow.style.backgroundColor = '#2980B9';
+        headerRow.style.color = 'white';
+        headerRow.style.fontWeight = 'bold';
+        
+        
+        const headers = ['Department', 'Total Employees', 'Employees Present (Time-In)', 'Employees Absent (Today)'];
+        headers.forEach(text => {
+            const th = document.createElement('th');
+            th.textContent = text;
+            headerRow.appendChild(th);
+        });
+
+
+        
+        const departments = Object.keys(departmentCounts).sort(); 
+
+        departments.forEach(deptName => {
+            const total = departmentCounts[deptName] || 0;
+            const present = presentCountsPerDept[deptName] || 0;
+            const absent = absentCountsPerDept[deptName] || 0; 
+
+            
+            if (total === 0 && deptName !== 'Admin' && deptName !== 'HR') return;
+
+            const row = summaryBody.insertRow();
+            row.insertCell().textContent = deptName;
+            row.insertCell().textContent = total;
+            row.insertCell().textContent = present; 
+            
+            const absentCell = row.insertCell();
+            absentCell.textContent = absent; 
+            absentCell.style.color = absent > 0 ? '#DC3545' : '#28A745';
+            absentCell.style.fontWeight = 'bold';
+        });
+        
+        
+        const totalEmployees = employees.length;
+        const totalRow = summaryBody.insertRow();
+        totalRow.style.fontWeight = 'bold';
+        totalRow.style.backgroundColor = '#ECF0F1';
+
+        totalRow.insertCell().textContent = 'GRAND TOTAL';
+        totalRow.insertCell().textContent = totalEmployees;
+        totalRow.insertCell().textContent = presentCount; 
+        totalRow.insertCell().textContent = totalAbsentCount;
+    }
+
+
+    document.getElementById('add-employee-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const newId = document.getElementById('new-id').value.trim();
+        const newName = document.getElementById('new-name').value.trim();
+        const newPassword = document.getElementById('new-password').value;
+        const newDept = document.getElementById('new-department').value;
+        const newRole = document.getElementById('new-role').value; 
+
+        if (!newId || !newName || !newPassword || !newDept || !newRole) {
+            alert('ERROR: All fields must be completed.'); return;
+        }
+
+        const isDuplicate = employees.some(emp => emp.id === newId);
+        if (isDuplicate) {
+            alert(`ERROR: Employee ID ${newId} already exists!`); return;
+        }
+
+        employees.push({
+            id: newId, name: newName, department: newDept,
+            role: newRole, password: newPassword, attendanceLogs: [] 
+        });
+        saveEmployees();
+        renderEmployeeTable();
+        
+        if (loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR')) {
+            renderDepartmentSummary();
+        }
+
+        alert(`SUCCESS: Employee ${newName} added!`);
+        this.reset(); closeModal('add-employee-modal');
+    });
+    
+    
+    document.getElementById('self-register-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const regId = document.getElementById('reg-id').value.trim();
+        const regName = document.getElementById('reg-name').value.trim();
+        const regPassword = document.getElementById('reg-password').value;
+        const regDept = document.getElementById('reg-department').value;
+
+        if (!regId || !regName || !regPassword || !regDept) {
+            alert('ERROR: All registration fields must be completed.'); 
+            return;
+        }
+
+        const isDuplicate = employees.some(emp => emp.id.toLowerCase() === regId.toLowerCase());
+        if (isDuplicate) {
+            alert(`ERROR: Employee ID ${regId} already exists!`); 
+            return;
+        }
+        
+        
+        employees.push({
+            id: regId, 
+            name: regName, 
+            department: regDept,
+            role: 'Employee', 
+            password: regPassword, 
+            attendanceLogs: [] 
+        });
+        saveEmployees();
+        
+        alert(`SUCCESS: Account for ${regName} created! You can now log in using ID: ${regId}.`);
+        this.reset(); 
+        closeModal('self-register-modal');
+        
+        
+        document.getElementById('employee-login-id').value = regId;
+        document.getElementById('employee-login-password').value = regPassword;
+    });
+
+
+    function openEditModal(employeeId) {
+        const employee = employees.find(emp => emp.id === employeeId);
+        if (!employee) return;
+
+        document.getElementById('edit-original-id').value = employee.id; 
+        document.getElementById('edit-id').value = employee.id;
+        document.getElementById('edit-name').value = employee.name;
+        document.getElementById('edit-department').value = employee.department;
+        document.getElementById('edit-role').value = employee.role; 
+        
+        openModal('edit-employee-modal');
+    }
+
+    document.getElementById('edit-employee-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        const originalId = document.getElementById('edit-original-id').value;
+        const updatedId = document.getElementById('edit-id').value.trim();
+        const updatedName = document.getElementById('edit-name').value.trim();
+        const updatedPassword = document.getElementById('edit-password').value; 
+        const updatedDept = document.getElementById('edit-department').value;
+        const updatedRole = document.getElementById('edit-role').value; 
+        
+        if (!updatedId || !updatedName || !updatedDept || !updatedRole) {
+            alert('ERROR: All fields must be completed.'); return;
+        }
+        
+        const index = employees.findIndex(emp => emp.id === originalId);
+
+        if (index > -1) {
+            if (updatedId !== originalId && employees.some(emp => emp.id === updatedId)) {
+                alert(`ERROR: Employee ID ${updatedId} already exists!`); return;
+            }
+            
+            employees[index].id = updatedId; employees[index].name = updatedName;
+            employees[index].department = updatedDept; employees[index].role = updatedRole; 
+            if (updatedPassword) { employees[index].password = updatedPassword; }
+
+            saveEmployees();
+            renderEmployeeTable();
+            
+            if (loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR')) {
+                renderDepartmentSummary();
+            }
+
+            alert(`SUCCESS: Employee ${updatedName}'s details updated!`);
+            closeModal('edit-employee-modal');
+        } else {
+            alert('ERROR: Employee not found!');
+        }
+    });
+
+    function deleteEmployee(employeeId, employeeName) {
+        const confirmation = confirm(`Are you sure you want to delete employee: ${employeeName} (ID: ${employeeId})? This action cannot be undone.`);
+        if (confirmation) {
+            employees = employees.filter(emp => emp.id !== employeeId);
+            saveEmployees();
+            renderEmployeeTable();
+            
+            if (loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR')) {
+                renderDepartmentSummary();
+            }
+            alert(`SUCCESS: Employee ${employeeName} deleted.`);
+        }
+    }
+
+    function filterEmployees() {
+        const filterText = document.getElementById('search-input').value.toLowerCase();
+        const tableBody = document.getElementById('employee-table-body');
+        tableBody.innerHTML = ''; 
+
+        const filteredEmployees = employees.filter(employee => 
+            employee.name.toLowerCase().includes(filterText) ||
+            employee.id.toLowerCase().includes(filterText) ||
+            employee.department.toLowerCase().includes(filterText)
+        );
+        
+        const isAdmin = loggedInUser && loggedInUser.role === 'Admin';
+        const isHRorAdmin = loggedInUser && (loggedInUser.role === 'Admin' || loggedInUser.role === 'HR');
+
+        filteredEmployees.forEach(employee => {
+            const statusData = getLastAttendanceStatus(employee);
+            const row = tableBody.insertRow();
+            
+            row.insertCell().textContent = employee.id;
+            row.insertCell().textContent = employee.name;
+            row.insertCell().textContent = employee.department;
+            row.insertCell().textContent = employee.role; 
+            
+            const statusCell = row.insertCell();
+            statusCell.textContent = statusData.status;
+            statusCell.style.fontWeight = 'bold';
+            statusCell.style.color = statusData.status === 'PRESENT' ? '#28A745' : (statusData.status === 'ABSENT' ? '#DC3545' : '#007BFF');
+
+            row.insertCell().textContent = statusData.latestIn;
+            
+            const actionCell = row.insertCell();
+            actionCell.className = 'admin-only-cell';
+
+            if (isAdmin) {
+                const editBtn = document.createElement('button');
+                editBtn.textContent = 'Edit';
+                editBtn.className = 'action-btn edit-btn';
+                editBtn.onclick = () => openEditModal(employee.id);
+                actionCell.appendChild(editBtn);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.className = 'action-btn delete-btn';
+                deleteBtn.onclick = () => deleteEmployee(employee.id, employee.name);
+                actionCell.appendChild(deleteBtn);
+            } else if (isHRorAdmin) {
+                 actionCell.textContent = 'View Only';
+            }
+        });
+
+        if (filteredEmployees.length === 0) {
+            const row = tableBody.insertRow();
+            const cell = row.insertCell();
+            cell.colSpan = 7;
+            cell.textContent = 'No employees found matching the search criteria.';
+            cell.style.textAlign = 'center';
+        }
+        checkAccessControl(loggedInUser ? loggedInUser.role : '');
+    }
+
+    function openModal(modalId) {
+        document.getElementById(modalId).style.display = 'block';
+    }
+
+    function closeModal(modalId) {
+        document.getElementById(modalId).style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            event.target.style.display = "none";
+        }
+    }
+
+    
+    window.onload = function() {
+        employees = getEmployees();
+        showLoginScreen(); 
+        
+        showRoleLogin('selector'); 
+    };
+</script>
+
+</body>
+</html>
